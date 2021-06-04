@@ -1,0 +1,15 @@
+#!/bin/bash -e
+i686-elf-as boot.s -o bin/boot.o
+i686-elf-gcc -c kernel.c -o bin/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -T linker.ld -o bin/os.bin -ffreestanding -O2 -nostdlib bin/boot.o bin/kernel.o -lgcc
+if grub-file --is-x86-multiboot bin/os.bin; then
+  echo multiboot confirmed
+else
+  echo the file is not multiboot
+fi
+echo menuentry "OS" { multiboot /boot/os.bin } > tmp/grub.cfg
+mkdir -p tmp/isodir/boot/grub
+cp bin/os.bin tmp/isodir/boot/os.bin
+cp tmp/grub.cfg tmp/isodir/boot/grub/grub.cfg
+grub-mkrescue -o os.iso tmp/isodir
+qemu-system-i386 os.iso
