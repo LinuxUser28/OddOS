@@ -1,34 +1,69 @@
-#include "libc.h"
-
-// See https://wiki.osdev.org/Printing_To_Screen for more info (incl. colors)
-
-// note this example will always write to the top
-// line of the screen
+/* Project "Whitetail/TXLonghorn" System screen/printing library
+See https://wiki.osdev.org/Printing_To_Screen for more info (incl. colors) */
 
 
+char *vram = (char*)0xB8000;
 
 void print(const char *string) {
-    volatile char *video = (volatile char*)0xB8000;
     const char *space = " ";
-    *video++ = *space++;
-    *video++ = 0;
+    *vram++ = *space++;
+    *vram++ = 0;
     while( *string != 0 )
-    {
-        *video++ = *string++;
-        *video++ = 10;
+    {           
+        *vram++ = *string++;
+        *vram++ = 10;
     }
 }
 
-void lineprint_print(volatile char *video,const char *string) {
+void clear(unsigned int color) {
+    const char *space0 = " ";
+    int num0 = 0;
+    color = color * 16;
+    while(num0 != (80*25)) {
+        *vram++ = *space0;
+        *vram++ = color;
+        num0++;
+    }
+}
+
+static void lineprint_print(volatile char *video,const char *string) {
     while( *string != 0 )
     {
         *video++ = *string++;
         *video++ = 10;
     }
 }
-void lineprint(const char *string, int data)
-{
-    if(data == 0) {volatile char *video = (volatile char*)0xB8000; lineprint_print(video,string);}
-    if(data == 1) {volatile char *video = (volatile char*)0xB80A0; lineprint_print(video,string);}
-    if(data == 2) {volatile char *video = (volatile char*)0xB8140; lineprint_print(video,string);}
+void lineprint(const char *string, unsigned int data) { 
+    // Add 'A0'(0x000A0) to '0xB8000' to get to another line on the screen
+    if (data <= 24) { volatile char *video = (volatile char*)(0xB8000 + data * 0x000A0); lineprint_print(video,string); }
+    else {print("NOTE: Screen row MUST stay under 25");}
+}
+
+/* Advanced Video Options
+*/
+
+void xyprint(const char *string, unsigned int x,unsigned int y) {
+    volatile char *video = (volatile char*)(0xB8000 + x * 0x000A0 + (y*2));
+    while( *string != 0 )
+    {
+        *video++ = *string++;
+        *video++ = 15;
+    }
+}
+
+void advprint(const char *string, int color) {
+    while( *string != 0 )
+    {
+        *vram++ = *string++;
+        *vram++ = color;
+    }
+}
+
+void line_advprint(const char *string, int color, unsigned int x) {
+    volatile char *video = (volatile char*)(0xB8000 + x * 0x000A0);
+    while( *string != 0 )
+    {
+        *video++ = *string++;
+        *video++ = color;
+    }
 }

@@ -4,9 +4,9 @@ export PREFIX="$HOME/opt/cross"
 export PATH="$PREFIX/bin:$PATH"
 
 # Compile with GAS/GCC
-i686-elf-as boot.s -o bin/boot.o
-i686-elf-gcc -c kernel.c -o bin/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
-i686-elf-gcc -T linker.ld -o bin/os.bin -ffreestanding -O2 -nostdlib bin/boot.o bin/kernel.o -lgcc
+i686-elf-as src/boot.s -o bin/boot.o
+i686-elf-gcc -c src/kernel.c -o bin/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+i686-elf-gcc -T src/linker.ld -o bin/os.bin -ffreestanding -O2 -nostdlib bin/boot.o bin/kernel.o -lgcc
 
 # Check for Multiboot 
 if grub-file --is-x86-multiboot bin/os.bin; then
@@ -21,6 +21,7 @@ mkdir -p tmp/isodir/boot/grub
 cp bin/os.bin tmp/isodir/boot/os.bin
 cp tmp/grub.cfg tmp/isodir/boot/grub/grub.cfg
 grub-mkrescue -o os.iso tmp/isodir
+
 
 # Run in QEMU i386
 qemu-system-i386 -cdrom os.iso
