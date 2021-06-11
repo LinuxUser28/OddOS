@@ -1,6 +1,6 @@
 (Legal information avalible [here](LICENSE))   
 
-# OddOS
+# Project Whitetail
 This project is made possible by (but not sponsored by) [OSDev Wiki](https://wiki.osdev.org/Main_Page)
 
 ## Compiling
