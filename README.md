@@ -5,7 +5,7 @@ This project is made possible by (but not sponsored by) [OSDev Wiki](https://wik
 
 ## Compiling
 ### Required:
-- GRUB
+- GRUB/GRUB-MKRESCUE
 - Xorriso
 - GNU GCC/BINUTLS Crosscompiler ([How to get](https://wiki.osdev.org/GCC_Cross-Compiler))
 
