@@ -17,12 +17,16 @@
 	line_advprint("Exiting terminal...",15,24);
 } */
 
-const char *start_string = "foorbar";
+
+void bluescreen(const char *msg) {
+	clear(1);
+	xycolorprint(msg,1,15,(25 / 2 - 1), (80 / 2 - (strlen(msg) / 2)));
+}
+
 
 void main()
 {
-	clear(1);
-	xyprint(start_string,(25 / 2),(80 / 2 - (strlen(start_string) / 2)));
-	//advprint("Main code initialized",15);
-	// Main code
+	//redscreen("This is a test");
+	bluescreen("ERROR: THERE IS NO ERROR");
 }
+
