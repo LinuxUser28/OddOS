@@ -17,6 +17,6 @@ Run (In terminal) ``./build``
 Currently unknown (I don't have a Mac)  
 If you know how, please open a Pull request with steps to compile.
 
-### On Windows
-Currently unknown (Windows doesn't have GNU Tools)  
-If you know how, please open a Pull request with steps to compile.
+### On Windows (Experimental)
+
+[WSL2](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
